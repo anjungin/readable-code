@@ -30,34 +30,40 @@ public class MinesweeperGame {
             String cellInput = getCellInputFromUser(scanner);
             String userActionInput = getUserActionInputFromUser(scanner);
 
-            int selectedColIndex = getSelectedColIndex(cellInput);
-            int selectedRowIndex = getSelectedRowIndex(cellInput);
-            if (doesUserChooseToPlantFlag(userActionInput)) {
-                BOARD[selectedRowIndex][selectedColIndex] = "⚑";
-                checkIfGameIsOver();
-            } else if (doesUserChooseToOpenFlag(userActionInput)) {
-                if (isLandMineCell(selectedRowIndex, selectedColIndex)) {
-                    BOARD[selectedRowIndex][selectedColIndex] = "☼";
-                    changeGameStatusToLose();
-                    continue;
-                } else {
-                    open(selectedRowIndex, selectedColIndex);
-                }
-                boolean isAllOpened = true;
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 10; j++) {
-                        if (BOARD[i][j].equals("□")) {
-                            isAllOpened = false;
-                        }
+            actOnCell(cellInput, userActionInput);
+        }
+    }
+
+    private static void actOnCell(String cellInput, String userActionInput) {
+        int selectedColIndex = getSelectedColIndex(cellInput);
+        int selectedRowIndex = getSelectedRowIndex(cellInput);
+        if (doesUserChooseToPlantFlag(userActionInput)) {
+            BOARD[selectedRowIndex][selectedColIndex] = "⚑";
+            checkIfGameIsOver();
+            return;
+        }
+        if (doesUserChooseToOpenFlag(userActionInput)) {
+            if (isLandMineCell(selectedRowIndex, selectedColIndex)) {
+                BOARD[selectedRowIndex][selectedColIndex] = "☼";
+                changeGameStatusToLose();
+                return;
+            }
+
+            open(selectedRowIndex, selectedColIndex);
+            boolean isAllOpened = true;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 10; j++) {
+                    if (BOARD[i][j].equals("□")) {
+                        isAllOpened = false;
                     }
                 }
-                if (isAllOpened) {
-                    changeGameStatusToWin();
-                }
-            } else {
-                System.out.println("잘못된 번호를 선택하셨습니다.");
             }
+            if (isAllOpened) {
+                changeGameStatusToWin();
+            }
+            return;
         }
+        System.out.println("잘못된 번호를 선택하셨습니다.");
     }
 
     private static void changeGameStatusToLose() {
