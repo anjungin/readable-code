@@ -203,38 +203,43 @@ public class MinesweeperGame {
 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 10; col++) {
-                int count = 0;
-                if (!LAND_MINES[row][col]) {
-                    if (row - 1 >= 0 && col - 1 >= 0 && LAND_MINES[row - 1][col - 1]) {
-                        count++;
-                    }
-                    if (row - 1 >= 0 && LAND_MINES[row - 1][col]) {
-                        count++;
-                    }
-                    if (row - 1 >= 0 && col + 1 < 10 && LAND_MINES[row - 1][col + 1]) {
-                        count++;
-                    }
-                    if (col - 1 >= 0 && LAND_MINES[row][col - 1]) {
-                        count++;
-                    }
-                    if (col + 1 < 10 && LAND_MINES[row][col + 1]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && col - 1 >= 0 && LAND_MINES[row + 1][col - 1]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && LAND_MINES[row + 1][col]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && col + 1 < 10 && LAND_MINES[row + 1][col + 1]) {
-                        count++;
-                    }
-                    LAND_MINE_COUNTS[row][col] = count;
+                if (LAND_MINES[row][col]) {
+                    LAND_MINE_COUNTS[row][col] = 0;
                     continue;
                 }
-                LAND_MINE_COUNTS[row][col] = 0;
+                int count = countNearbyLandMines(row, col);
+                LAND_MINE_COUNTS[row][col] = count;
             }
         }
+    }
+
+    private static int countNearbyLandMines(int row, int col) {
+        int count = 0;
+        if (row - 1 >= 0 && col - 1 >= 0 && LAND_MINES[row - 1][col - 1]) {
+            count++;
+        }
+        if (row - 1 >= 0 && LAND_MINES[row - 1][col]) {
+            count++;
+        }
+        if (row - 1 >= 0 && col + 1 < 10 && LAND_MINES[row - 1][col + 1]) {
+            count++;
+        }
+        if (col - 1 >= 0 && LAND_MINES[row][col - 1]) {
+            count++;
+        }
+        if (col + 1 < 10 && LAND_MINES[row][col + 1]) {
+            count++;
+        }
+        if (row + 1 < 8 && col - 1 >= 0 && LAND_MINES[row + 1][col - 1]) {
+            count++;
+        }
+        if (row + 1 < 8 && LAND_MINES[row + 1][col]) {
+            count++;
+        }
+        if (row + 1 < 8 && col + 1 < 10 && LAND_MINES[row + 1][col + 1]) {
+            count++;
+        }
+        return count;
     }
 
     private static void showGameStartComments() {
